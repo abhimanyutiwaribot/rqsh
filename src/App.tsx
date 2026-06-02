@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Box, Text } from "ink";
+import { Box } from "ink";
 import HomeScreen from "./screens/HomeScreen.js";
 import RequestScreen from "./screens/RequestScreen.js";
 import CollectionsScreen from "./screens/CollectionsScreen.js";
 import HistoryScreen from "./screens/HistoryScreen.js";
 import SettingsScreen from "./screens/SettingsScreen.js";
 
-type Screen = "home" | "request" | "collections" | "history" | "setting";
+type Screen = "home" | "request" | "collections" | "history" | "settings";
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("home");
@@ -21,7 +21,7 @@ export default function App() {
         return <CollectionsScreen onBack={() => setCurrentScreen("home")} />;
       case "history":
         return <HistoryScreen onBack={() => setCurrentScreen("home")} />;
-      case "setting":
+      case "settings":
         return <SettingsScreen onBack={() => setCurrentScreen("home")} />;
       default:
         return <HomeScreen onNavigate={setCurrentScreen} />;
