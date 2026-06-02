@@ -25,6 +25,7 @@ export default function RequestScreen({ onBack }: RequestScreenProps) {
       const currentIndex = tabs.indexOf(activeTab);
       const nextTab =
         (tabs[(currentIndex + 1) % tabs.length] as RequestTab) || tabs[0]!;
+      console.log(nextTab)
       setActiveTab(nextTab);
     }
 
