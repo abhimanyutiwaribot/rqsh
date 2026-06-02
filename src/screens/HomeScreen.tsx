@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import { Box, Text, useInput } from "ink";
 
 interface HomeScreenProps {
-  onNavigate: (screen: "home" | "request" | "collections" | "history" | "setting") => void;
+  onNavigate: (screen: "home" | "request" | "collections" | "history" | "settings") => void;
 }
 
 export default function HomeScreen({ onNavigate }: HomeScreenProps) {
   const menuItems = [
     { label: "New Request", value: "request" },
-    { label: "Collections", value: "collections" },
-    { label: "History", value: "history" },
-    { label: "Settings", value: "setting"},
+    { label: "Collections ...coming soon", value: "collections" },
+    { label: "History ...coming soon", value: "history" },
+    { label: "Settings ...coming soon", value: "settings" },
     { label: "Exit", value: "exit" },
   ];
 
@@ -36,13 +36,14 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
       if (selected.value === "exit") {
         process.exit(0);
       }
-      onNavigate(selected.value as "request" | "collections" | "history");
+      onNavigate(selected.value as "request" | "collections" | "history" | "settings");
     }
 
     if (input === "1") setSelectedIndex(0);
     if (input === "2") setSelectedIndex(1);
     if (input === "3") setSelectedIndex(2);
     if (input === "4") setSelectedIndex(3);
+    if (input === "5") setSelectedIndex(4);
   });
 
   return (
@@ -66,7 +67,7 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
       <Box marginTop={2} gap={2}>
         <Text color="gray">↑/↓ Navigate</Text>
         <Text color="gray">Enter Select</Text>
-        <Text color="gray">1-4 Direct</Text>
+        <Text color="gray">1-5 Direct</Text>
       </Box>
     </Box>
   );
