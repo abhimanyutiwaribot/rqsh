@@ -35,9 +35,9 @@ export async function executeRequest(config: RequestConfig): Promise<RequestResu
     }
 
     const response = await fetch(config.url, options);
-
+  
     const text = await response.text();
-
+    console.log("this is the response" + response)
     return {
       status: response.status,
       headers: Object.fromEntries(response.headers.entries()),
