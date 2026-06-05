@@ -28,10 +28,10 @@ const responseLines: string[] = (() => {
   return Object.entries(responseState.response.headers).map(([k, v]) => `${k}: ${v}`);
 })();
 
-const totalLines = responseLines.length;
-const visibleLines = responseLines.slice(responseState.respScroll, responseState.respScroll + VIEWPORT_HEIGHT);
+export const totalLines = responseLines.length;
+export const visibleLines = responseLines.slice(responseState.respScroll, responseState.respScroll + VIEWPORT_HEIGHT);
 // Pad to fixed height so layout doesn't shift
-const paddedLines = [
+export const paddedLines = [
   ...visibleLines,
   ...Array(Math.max(0, VIEWPORT_HEIGHT - visibleLines.length)).fill(""),
 ];
