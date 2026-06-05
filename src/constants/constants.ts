@@ -7,9 +7,3 @@ export const LEFT_SECTIONS: LeftSection[] = ["url-method", "params", "req-header
 export const VIEWPORT_HEIGHT = 18; // lines visible in response viewport
 export const DIVIDER = "─".repeat(54);
 export const RIGHT_DIVIDER = "─".repeat(56);
-
-
-const uiState = useUiState()
-export const leftActive = uiState.panel === "left";
-export const rightActive = uiState.panel === "right";
-export const isEditing = uiState.editMode !== "none";
