@@ -1,6 +1,6 @@
 import { Box, Text } from "ink";
 import SectionHeader from "./SectionHeader.js";
-import { DIVIDER, leftActive } from "../constants/constants.js";
+import { DIVIDER } from "../constants/constants.js";
 import { useRequestState } from "../hooks/useRequestState.js";
 import { useUiState } from "../hooks/useUiState.js";
 import TextInput from "./TextInput.js";
@@ -10,6 +10,8 @@ export default function RequestPanel(){
 
   const requestState = useRequestState()
   const uiState = useUiState()
+
+  const leftActive = uiState.panel === "left";  
 
   return (
     <Box
