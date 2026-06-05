@@ -1,5 +1,4 @@
 import { VIEWPORT_HEIGHT } from "../constants/constants.js";
-import { useRequestState } from "../hooks/useRequestState.js";
 import { useResponseState } from "../hooks/useResponseState.js";
 import { useUiState } from "../hooks/useUiState.js";
 
