@@ -11,7 +11,96 @@ export default function App() {
   // Wire up REPL keyboard event loop
   useKeyboardNavigation({ state });
 
-  // Get active scrollback lines
+  const INSPECTOR_HEIGHT = 18;
+
+  // ── RENDER MODE: RESPONSE INSPECTOR ──
+  if (state.viewingResponse) {
+    const isBodyTab = state.inspectorTab === "body";
+    
+    // Parse inspector lines based on active tab
+    const inspectorLines = isBodyTab
+      ? state.lastResponseBody.split("\n")
+      : Object.entries(state.lastResponseHeaders).map(([k, v]) => `${k}: ${v}`);
+
+    const visibleInspectorLines = inspectorLines.slice(
+      state.inspectorScroll,
+      state.inspectorScroll + INSPECTOR_HEIGHT
+    );
+
+    const paddedInspectorLines = [
+      ...visibleInspectorLines,
+      ...Array(Math.max(0, INSPECTOR_HEIGHT - visibleInspectorLines.length)).fill("")
+    ];
+
+    return (
+      <Box flexDirection="column" padding={1}>
+        {/* Inspector Header */}
+        <Box paddingX={1} gap={1} marginBottom={0}>
+          <Text bold color="magenta">❯ Response Details</Text>
+          <Text dimColor>—</Text>
+          <Text color="gray">
+            Status: <Text color="green" bold>{state.lastResponseStatus}</Text>  •  
+            Time: <Text color="white">{state.lastResponseTime}ms</Text>  •  
+            Size: <Text color="white">{state.lastResponseSize}</Text>
+          </Text>
+        </Box>
+
+        {/* Tab Buttons */}
+        <Box paddingX={1} gap={3} marginBottom={1} marginTop={1}>
+          <Text bold color={isBodyTab ? "cyan" : "gray"}>
+            {isBodyTab ? "● [Body]" : "  [Body]"}
+          </Text>
+          <Text bold color={!isBodyTab ? "cyan" : "gray"}>
+            {!isBodyTab ? "● [Headers]" : "  [Headers]"}
+          </Text>
+          <Text dimColor>(Tab or h/l to switch)</Text>
+        </Box>
+
+        {/* Inspector Viewport */}
+        <Box 
+          flexDirection="column" 
+          height={INSPECTOR_HEIGHT} 
+          overflow="hidden" 
+          paddingX={1} 
+          marginBottom={1}
+        >
+          {paddedInspectorLines.map((line, i) => (
+            <Box key={i}>
+              {isBodyTab ? (
+                highlightJsonLine(line)
+              ) : (
+                <Text color="white">{line}</Text>
+              )}
+            </Box>
+          ))}
+        </Box>
+
+        {/* Scroll coordinates & copy confirmation */}
+        <Box paddingX={1} gap={2} height={1}>
+          {inspectorLines.length > INSPECTOR_HEIGHT && (
+            <Text dimColor>
+              Line {state.inspectorScroll + 1}–{Math.min(state.inspectorScroll + INSPECTOR_HEIGHT, inspectorLines.length)} of {inspectorLines.length}
+            </Text>
+          )}
+          {state.copied && (
+            <Text color="green">✓ Copied response body to clipboard!</Text>
+          )}
+        </Box>
+
+        {/* Bottom Help Bar */}
+        <Box paddingX={1} marginTop={1}>
+          <Text dimColor>
+            <Text color="cyan">Tab</Text> toggle tabs  •  
+            <Text color="cyan">j/k (↑/↓)</Text> scroll  •  
+            <Text color="green">c</Text> copy body  •  
+            <Text color="red">Esc / q</Text> close inspector
+          </Text>
+        </Box>
+      </Box>
+    );
+  }
+
+  // ── RENDER MODE: STANDARD REPL CONSOLE ──
   const visibleLines = state.consoleLines.slice(
     state.scrollOffset,
     state.scrollOffset + state.VIEWPORT_HEIGHT
@@ -19,26 +108,26 @@ export default function App() {
 
   return (
     <Box flexDirection="column" padding={1}>
-      {/* ── HEADER ── */}
+      {/* Header */}
       <Box paddingX={1} gap={1} marginBottom={0}>
         <Text bold color="cyan">❯ PostCLI REPL</Text>
         <Text dimColor>—</Text>
         <Text color="gray">interactive HTTP shell console</Text>
       </Box>
 
-      {/* ── ACTIVE SETTINGS BADGE ── */}
+      {/* Settings status badges */}
       <Box paddingX={1} marginBottom={1} gap={2}>
         <Text color="gray">
           Base URL: {state.baseUrl ? <Text color="green" bold>{state.baseUrl}</Text> : <Text dimColor>none (use /set base &lt;url&gt;)</Text>}
         </Text>
         {state.lastResponseBody && (
           <Text color="gray">
-            Last Response: <Text color="magenta">available</Text> <Text dimColor>(Esc+c to copy)</Text>
+            Last Response: <Text color="magenta">available</Text> <Text dimColor>(Press v to view details)</Text>
           </Text>
         )}
       </Box>
 
-      {/* ── SCROLLBACK VIEWPORT ── */}
+      {/* Output Console Log */}
       <Box 
         flexDirection="column" 
         maxHeight={state.VIEWPORT_HEIGHT} 
@@ -48,7 +137,7 @@ export default function App() {
       >
         {visibleLines.map((line, i) => (
           <Box key={i}>
-            {/* If line starts with a bracket/brace or whitespace quote, highlight as JSON */}
+            {/* Run highlighting only if it looks like JSON structure */}
             {/^\s*([{\}[\]"]|true|false|null|-?\d)/.test(line) ? (
               highlightJsonLine(line)
             ) : (
@@ -60,7 +149,7 @@ export default function App() {
         ))}
       </Box>
 
-      {/* ── MASCOT ANIMATION / PROGRESS DISPLAY ── */}
+      {/* Mascot loading animations */}
       {state.loading && (
         <Box height={10} paddingX={1} flexDirection="column" justifyContent="center" marginBottom={1}>
           {state.activeAnimation === "success" && (
@@ -88,7 +177,7 @@ export default function App() {
         </Box>
       )}
 
-      {/* ── INTERACTIVE PROMPT LINE ── */}
+      {/* Prompt Input bar */}
       <Box paddingX={1} marginTop={1}>
         {state.panel === "input" ? (
           <Box>
@@ -115,8 +204,9 @@ export default function App() {
             <Text color="yellow" bold>SCROLL MODE ❯ </Text>
             <Text color="gray">
               <Text color="cyan">j/k (↑/↓)</Text> scroll log  •  
-              <Text color="green">c</Text> copy last response  •  
-              <Text color="yellow">Esc / i</Text> back to prompt  •  
+              <Text color="cyan">v</Text> inspect response  •  
+              <Text color="green">c</Text> copy body  •  
+              <Text color="yellow">Esc / i</Text> edit  •  
               <Text color="red">q</Text> quit
             </Text>
           </Box>

@@ -8,13 +8,90 @@ interface KeyboardNavigationProps {
 
 export function useKeyboardNavigation({ state }: KeyboardNavigationProps) {
   useInput((input, key) => {
-    const { panel, inputValue, suggestion, history, historyIndex, totalLines, VIEWPORT_HEIGHT } = state;
-    
+    const { 
+      panel, 
+      inputValue, 
+      suggestion, 
+      history, 
+      historyIndex, 
+      totalLines, 
+      VIEWPORT_HEIGHT,
+      viewingResponse,
+      inspectorTab,
+      lastResponseBody,
+      lastResponseHeaders
+    } = state;
+
+    // ── PANEL: RESPONSE INSPECTOR MODE (OVERLAY) ──
+    if (viewingResponse) {
+      // Close Inspector (Esc or q)
+      if (key.escape || input === "q" || input === "Q") {
+        state.setViewingResponse(false);
+        return;
+      }
+
+      // Toggle Tabs (Tab or h/l or arrow keys)
+      if (key.tab || input === "h" || input === "l" || key.leftArrow || key.rightArrow) {
+        state.setInspectorTab((t) => (t === "body" ? "headers" : "body"));
+        state.setInspectorScroll(0); // Reset scroll position on tab toggle
+        return;
+      }
+
+      const totalInspectorLines = inspectorTab === "body"
+        ? lastResponseBody.split("\n").length
+        : Object.keys(lastResponseHeaders).length;
+
+      const INSPECTOR_HEIGHT = 18;
+
+      // Scroll Down (j or down arrow)
+      if (input === "j" || key.downArrow) {
+        state.setInspectorScroll((s) =>
+          Math.min(s + 1, Math.max(0, totalInspectorLines - INSPECTOR_HEIGHT))
+        );
+        return;
+      }
+
+      // Scroll Up (k or up arrow)
+      if (input === "k" || key.upArrow) {
+        state.setInspectorScroll((s) => Math.max(0, s - 1));
+        return;
+      }
+
+      // Vim scroll keys: gg (top), G (bottom)
+      if (input === "g") {
+        state.setInspectorScroll(0);
+        return;
+      }
+
+      if (input === "G") {
+        state.setInspectorScroll(Math.max(0, totalInspectorLines - INSPECTOR_HEIGHT));
+        return;
+      }
+
+      // Copy response body
+      if (input === "c" || input === "C") {
+        void state.copyResponseDirectly();
+        return;
+      }
+
+      return;
+    }
+
     // ── Global System Controls ──
     if (input === "q" || input === "Q") {
       if (panel === "log") {
         process.exit(0);
       }
+    }
+
+    // Toggle Response Inspector (v / V)
+    if (input === "v" || input === "V") {
+      if (lastResponseBody) {
+        state.setViewingResponse(true);
+        state.setInspectorTab("body");
+        state.setInspectorScroll(0);
+      }
+      return;
     }
 
     // Toggle between input prompt and scrollable log console
@@ -83,9 +160,8 @@ export function useKeyboardNavigation({ state }: KeyboardNavigationProps) {
         return;
       }
 
-      // Standard character entry (skip if control/meta modifiers are active)
+      // Standard character entry
       if (input && !key.ctrl && !key.meta) {
-        // Prevent backspaces, delete or other control characters (e.g. 127 delete) from being added as normal input
         const code = input.charCodeAt(0);
         if (code >= 32 && code !== 127) {
           state.setInputValue(tfInsert(inputValue, input));

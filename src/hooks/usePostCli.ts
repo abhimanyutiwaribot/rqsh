@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import clipboard from "clipboardy";
 import { executeRequest } from "../core/executeRequest.js";
 import { parseReplCommand } from "../utils/parseReplCommand.js";
-import { prettyBody } from "../utils/response.js";
+import { prettyBody, byteSize } from "../utils/response.js";
 import { SPINNER_FRAMES } from "../utils/animations.js";
 import { makeField, type TextField } from "../utils/textField.js";
 
@@ -25,6 +25,15 @@ export function usePostCli() {
   const [scrollOffset, setScrollOffset] = useState(0);
   const [copied, setCopied] = useState(false);
   const [lastResponseBody, setLastResponseBody] = useState("");
+
+  // --- Inspector State ---
+  const [viewingResponse, setViewingResponse] = useState(false);
+  const [inspectorTab, setInspectorTab] = useState<"body" | "headers">("body");
+  const [inspectorScroll, setInspectorScroll] = useState(0);
+  const [lastResponseHeaders, setLastResponseHeaders] = useState<Record<string, string>>({});
+  const [lastResponseStatus, setLastResponseStatus] = useState("");
+  const [lastResponseTime, setLastResponseTime] = useState(0);
+  const [lastResponseSize, setLastResponseSize] = useState("");
 
   // --- Request Loading & Animation ---
   const [loading, setLoading] = useState(false);
@@ -139,6 +148,7 @@ export function usePostCli() {
           "    c                 - Copy last response body (Scroll Mode only)",
           "    Tab               - Accept autocomplete suggestion",
           "    Up/Down Arrows    - Traverse command history (Edit Mode only)",
+          "    v                 - View last response in Full-Screen Inspector",
           "",
           "  PostCLI Commands:",
           "    /set base <url>   - Set default base URL (e.g. /set base https://api.github.com)",
@@ -193,44 +203,59 @@ export function usePostCli() {
 
     const isSuccess = !("error" in result) && result.status < 400;
 
-    // Play勝利 or 失敗 animation, then print results
+    // Play victory or failure mascot animation
     playAnimation(isSuccess, () => {
       setLoading(false);
       
-      // Build HTTPie-style output block
-      const responseLog: string[] = [];
-      
-      // Request Headers
-      Object.entries(parsed.headers).forEach(([k, v]) => {
-        responseLog.push(`  ${k}: ${v}`);
-      });
-      responseLog.push("");
-
       if ("error" in result) {
-        responseLog.push(`✖ Request Failed (${result.time}ms)`);
-        responseLog.push(`Error: ${result.error}`);
-        responseLog.push("");
-      } else {
-        responseLog.push(`HTTP/1.1 ${result.status} ${result.status < 400 ? "OK" : "Error"} (${result.time}ms)`);
-        Object.entries(result.headers).forEach(([k, v]) => {
-          responseLog.push(`${k}: ${v}`);
+        setConsoleLines((prev) => {
+          const copy = [...prev];
+          copy.splice(logIndex, 1);
+          return [
+            ...copy,
+            `✖  ${parsed.method} ${parsed.url} failed: ${result.error} (${result.time}ms)`,
+            ""
+          ];
         });
-        responseLog.push("");
 
-        // Format body
+        // Set failed details for inspector
+        setLastResponseBody(`Error: ${result.error}`);
+        setLastResponseHeaders({});
+        setLastResponseStatus("Error");
+        setLastResponseTime(result.time);
+        setLastResponseSize("—");
+        
+        // Open inspector to show failure
+        setViewingResponse(true);
+        setInspectorTab("body");
+        setInspectorScroll(0);
+      } else {
         const pretty = prettyBody(result.body);
-        setLastResponseBody(pretty);
-        responseLog.push(...pretty.split("\n"));
-        responseLog.push("");
-      }
+        const sizeStr = byteSize(result.body);
+        const statusText = `${result.status} ${result.status < 400 ? "OK" : "Error"}`;
+        
+        setConsoleLines((prev) => {
+          const copy = [...prev];
+          copy.splice(logIndex, 1);
+          return [
+            ...copy,
+            `✔  ${result.status} ${result.status < 400 ? "OK" : "Error"}  •  ${result.time}ms  •  ${sizeStr}  (Press v to view details)`,
+            ""
+          ];
+        });
 
-      // Replace the spinner/loading line in consoleLines with the full output
-      setConsoleLines((prev) => {
-        const copy = [...prev];
-        // Remove the "Sending..." line we pushed earlier
-        copy.splice(logIndex, 1);
-        return [...copy, ...responseLog];
-      });
+        // Save response details
+        setLastResponseBody(pretty);
+        setLastResponseHeaders(result.headers);
+        setLastResponseStatus(statusText);
+        setLastResponseTime(result.time);
+        setLastResponseSize(sizeStr);
+        
+        // Auto-open response inspector!
+        setViewingResponse(true);
+        setInspectorTab("body");
+        setInspectorScroll(0);
+      }
     });
   };
 
@@ -267,7 +292,19 @@ export function usePostCli() {
     totalLines,
     VIEWPORT_HEIGHT,
     submitCommand,
-    copyResponseDirectly
+    copyResponseDirectly,
+
+    // Inspector
+    viewingResponse,
+    setViewingResponse,
+    inspectorTab,
+    setInspectorTab,
+    inspectorScroll,
+    setInspectorScroll,
+    lastResponseHeaders,
+    lastResponseStatus,
+    lastResponseTime,
+    lastResponseSize
   };
 }
 export type PostCliState = ReturnType<typeof usePostCli>;
