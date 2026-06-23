@@ -8,7 +8,7 @@ export function makeField(value = ""): TextField {
 }
 
 export function tfInsert(f: TextField, ch: string): TextField {
-  return { value: f.value.slice(0, f.cursor) + ch + f.value.slice(f.cursor), cursor: f.cursor + 1 };
+  return { value: f.value.slice(0, f.cursor) + ch + f.value.slice(f.cursor), cursor: f.cursor + ch.length };
 }
 
 export function tfDelete(f: TextField): TextField {

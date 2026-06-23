@@ -41,7 +41,7 @@ export function useKeyboardNavigation({ state }: KeyboardNavigationProps) {
         ? lastResponseBody.split("\n").length
         : Object.keys(lastResponseHeaders).length;
 
-      const INSPECTOR_HEIGHT = 18;
+      const { INSPECTOR_HEIGHT } = state;
 
       // Scroll Down (j or down arrow)
       if (input === "j" || key.downArrow) {

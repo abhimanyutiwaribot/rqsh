@@ -16,7 +16,7 @@ export function usePostCli() {
     "❯ PostCLI — interactive developer HTTP client",
     "Type a request (e.g. GET /posts/1) or type /help for guides.",
     "",
-    "  Esc     - Toggle Scroll Mode (j/k to scroll log, c to copy)",
+    "Esc - Toggle Scroll Mode (j/k to scroll log, c to copy)",
     ""
   ]);
 
@@ -40,16 +40,30 @@ export function usePostCli() {
   const [loading, setLoading] = useState(false);
   const [spinnerFrame, setSpinnerFrame] = useState(0);
 
-  // --- Auto-calculated Scroll Window ---
-  const VIEWPORT_HEIGHT = 16;
+  // --- Dynamic Terminal Dimensions ---
+  const [terminalRows, setTerminalRows] = useState(process.stdout?.rows || 24);
+
+  useEffect(() => {
+    if (!process.stdout) return;
+    const handleResize = () => {
+      setTerminalRows(process.stdout.rows || 24);
+    };
+    process.stdout.on("resize", handleResize);
+    return () => {
+      process.stdout.off("resize", handleResize);
+    };
+  }, []);
+
+  const VIEWPORT_HEIGHT = Math.max(8, terminalRows - 7);
+  const INSPECTOR_HEIGHT = Math.max(8, terminalRows - 9);
   const totalLines = consoleLines.length;
 
-  // Auto-scroll to bottom when new logs are added (if not actively scrolling)
+  // Auto-scroll to bottom when new logs are added (if not actively scrolling/resizing)
   useEffect(() => {
     if (panel === "input") {
       setScrollOffset(Math.max(0, totalLines - VIEWPORT_HEIGHT));
     }
-  }, [consoleLines, panel, totalLines]);
+  }, [consoleLines, panel, totalLines, VIEWPORT_HEIGHT]);
 
   // Loading spinner ticker
   useEffect(() => {
@@ -135,26 +149,12 @@ export function usePostCli() {
       } else if (cmd === "help") {
         setConsoleLines((prev) => [
           ...prev,
-          "  Keyboard Controls:",
-          "    Esc               - Toggle between Edit Mode and Scroll Mode",
-          "    j/k (or Up/Down)  - Scroll up/down through history (Scroll Mode only)",
-          "    c                 - Copy last response body (Scroll Mode only)",
-          "    Tab               - Accept autocomplete suggestion",
-          "    Up/Down Arrows    - Traverse command history (Edit Mode only)",
-          "    v                 - View last response in Full-Screen Inspector",
-          "",
-          "  PostCLI Commands:",
-          "    /set base <url>   - Set default base URL (e.g. /set base https://api.github.com)",
-          "    /clear            - Clear the console log history",
-          "    /copy             - Copy the body of the last successful response",
-          "    /exit, /quit      - Close the CLI application",
-          "    /help             - View this instructions guide",
-          "",
-          "  HTTPie Item Syntax:",
-          "    GET /users/octocat                 - Default method is GET",
-          "    POST /posts title=\"hello\" age:=20   - Send JSON (age:=20 is parsed JSON)",
-          "    GET /posts limit=10                - Query parameter",
-          "    GET /users/octocat User-Agent:CLI  - Custom request Header",
+          "  Controls: [Esc] Edit/Scroll mode | [Tab] Autocomplete | [v] View response | [c] Copy body",
+          "  Commands: /set base <url> | /clear | /copy | /help | /exit",
+          "  HTTPie Syntax examples:",
+          "    GET /posts limit=10                  (Query param)",
+          "    POST /posts title=\"hello\" active:=true (JSON payload)",
+          "    GET /users Authorization:Bearer      (Request Header)",
           ""
         ]);
       } else if (cmd === "set") {
@@ -277,6 +277,8 @@ export function usePostCli() {
     suggestion,
     totalLines,
     VIEWPORT_HEIGHT,
+    INSPECTOR_HEIGHT,
+    terminalRows,
     submitCommand,
     copyResponseDirectly,
 
