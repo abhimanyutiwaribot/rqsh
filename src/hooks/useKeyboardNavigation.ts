@@ -1,4 +1,5 @@
 import { useInput } from "ink";
+import { useRef } from "react";
 import { makeField, tfDelete, tfInsert, tfLeft, tfRight } from "../utils/textField.js";
 import type { usePostCli } from "./usePostCli.js";
 
@@ -6,8 +7,12 @@ interface KeyboardNavigationProps {
   state: ReturnType<typeof usePostCli>;
 }
 
-export function useKeyboardNavigation({ state }: KeyboardNavigationProps) {
+export function useKeyboardNavigation({ state: propState }: KeyboardNavigationProps) {
+  const stateRef = useRef(propState);
+  stateRef.current = propState;
+
   useInput((input, key) => {
+    const state = stateRef.current;
     const { 
       panel, 
       inputValue, 
