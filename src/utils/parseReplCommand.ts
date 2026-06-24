@@ -48,6 +48,66 @@ export function tokenize(str: string): string[] {
   return tokens;
 }
 
+export function parseKeyPath(key: string): string[] {
+  const parts: string[] = [];
+  const firstBracket = key.indexOf("[");
+  if (firstBracket === -1) {
+    return [key];
+  }
+  parts.push(key.substring(0, firstBracket));
+  const bracketRegex = /\[(.*?)\]/g;
+  const remaining = key.substring(firstBracket);
+  let match;
+  while ((match = bracketRegex.exec(remaining)) !== null) {
+    parts.push(match[1]!);
+  }
+  return parts;
+}
+
+export function setNestedValue(obj: Record<string, any>, keyPathStr: string, rawVal: string, isJson: boolean) {
+  const parts = parseKeyPath(keyPathStr);
+  let value: any = rawVal;
+  if (isJson) {
+    try {
+      value = JSON.parse(rawVal);
+    } catch {
+      value = rawVal;
+    }
+  }
+
+  let current = obj;
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i]!;
+    const isLast = i === parts.length - 1;
+
+    if (isLast) {
+      if (part === "") {
+        if (Array.isArray(current)) {
+          current.push(value);
+        }
+      } else {
+        current[part] = value;
+      }
+    } else {
+      const nextPart = parts[i + 1]!;
+      const isNextArray = nextPart === "" || /^\d+$/.test(nextPart);
+
+      if (part === "") {
+        const nextObj = isNextArray ? [] : {};
+        if (Array.isArray(current)) {
+          current.push(nextObj);
+          current = nextObj;
+        }
+      } else {
+        if (current[part] === undefined) {
+          current[part] = isNextArray ? [] : {};
+        }
+        current = current[part];
+      }
+    }
+  }
+}
+
 export function parseReplCommand(input: string, baseUrl?: string): ParsedCommand {
   const trimmed = input.trim();
   if (!trimmed) {
@@ -57,8 +117,9 @@ export function parseReplCommand(input: string, baseUrl?: string): ParsedCommand
   const tokens = tokenize(trimmed);
   const firstToken = tokens[0]!;
 
-  // 1. Check for system command (starts with /)
-  if (firstToken.startsWith("/")) {
+  // 1. Check for system command (starts with / followed by valid system command name)
+  const SYSTEM_COMMANDS = ["set", "clear", "copy", "help", "exit", "quit"];
+  if (firstToken.startsWith("/") && SYSTEM_COMMANDS.includes(firstToken.slice(1).toLowerCase())) {
     return {
       type: "system",
       systemCmd: firstToken.slice(1).toLowerCase(),
@@ -109,45 +170,58 @@ export function parseReplCommand(input: string, baseUrl?: string): ParsedCommand
   // Parse HTTPie arguments
   const headers: Record<string, string> = {};
   const queryParams: Record<string, string> = {};
-  const bodyFields: Record<string, unknown> = {};
+  const bodyFields: Record<string, any> = {};
 
   for (const token of argTokens) {
-    // A. Header (Key:Val) - must not match a URL scheme like http:
-    const headerMatch = token.match(/^([a-zA-Z0-9_-]+):(.*)$/);
-    if (headerMatch) {
-      const [, key, val] = headerMatch;
-      if (key && val) {
-        headers[key] = val;
-        continue;
-      }
-    }
+    let matched = false;
 
-    // B. JSON body field (Key:=JSONVal)
-    const jsonMatch = token.match(/^([a-zA-Z0-9_-]+):=(.*)$/);
+    // A. JSON body field (Key:=JSONVal)
+    const jsonMatch = token.match(/^([a-zA-Z0-9_\-\[\]]+):=(.*)$/);
     if (jsonMatch) {
       const [, key, val] = jsonMatch;
-      if (key && val) {
-        try {
-          bodyFields[key] = JSON.parse(val);
-        } catch {
-          // If JSON parse fails, treat it as a string
-          bodyFields[key] = val;
-        }
-        continue;
+      if (key && val !== undefined) {
+        setNestedValue(bodyFields, key, val, true);
+        matched = true;
       }
     }
 
-    // C. Query Param or String Body Field (Key=Val)
-    const equalsMatch = token.match(/^([a-zA-Z0-9_-]+)=(.*)$/);
-    if (equalsMatch) {
-      const [, key, val] = equalsMatch;
-      if (key && val) {
-        if (["GET", "HEAD", "OPTIONS"].includes(method)) {
+    // B. Query Param explicitly (Key==Val)
+    if (!matched) {
+      const queryMatch = token.match(/^([a-zA-Z0-9_\-\[\]]+)==(.*)$/);
+      if (queryMatch) {
+        const [, key, val] = queryMatch;
+        if (key && val !== undefined) {
           queryParams[key] = val;
-        } else {
-          bodyFields[key] = val;
+          matched = true;
         }
-        continue;
+      }
+    }
+
+    // C. String Body Field or Query Param fallback (Key=Val)
+    if (!matched) {
+      const equalsMatch = token.match(/^([a-zA-Z0-9_\-\[\]]+)=(.*)$/);
+      if (equalsMatch) {
+        const [, key, val] = equalsMatch;
+        if (key && val !== undefined) {
+          if (["GET", "HEAD", "OPTIONS"].includes(method)) {
+            queryParams[key] = val;
+          } else {
+            setNestedValue(bodyFields, key, val, false);
+          }
+          matched = true;
+        }
+      }
+    }
+
+    // D. Header (Key:Val) - must not match a URL scheme like http:
+    if (!matched) {
+      const headerMatch = token.match(/^([a-zA-Z0-9_\-\[\]]+):(.*)$/);
+      if (headerMatch) {
+        const [, key, val] = headerMatch;
+        if (key && val !== undefined) {
+          headers[key] = val;
+          matched = true;
+        }
       }
     }
   }
@@ -156,6 +230,19 @@ export function parseReplCommand(input: string, baseUrl?: string): ParsedCommand
   let bodyStr = "";
   if (Object.keys(bodyFields).length > 0) {
     bodyStr = JSON.stringify(bodyFields);
+  }
+
+  // Append query parameters to finalUrl if any
+  if (Object.keys(queryParams).length > 0) {
+    try {
+      const urlObj = new URL(finalUrl);
+      for (const [k, v] of Object.entries(queryParams)) {
+        urlObj.searchParams.append(k, v);
+      }
+      finalUrl = urlObj.toString();
+    } catch {
+      // Fallback
+    }
   }
 
   return {
