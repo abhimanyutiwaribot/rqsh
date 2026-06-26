@@ -27,7 +27,7 @@ export default function Header({ isDarkMode, onToggleTheme }: HeaderProps) {
           Docs
         </a>
         <a
-          href="https://github.com"
+          href="https://github.com/abhimanyutiwaribot/postcli"
           target="_blank"
           rel="noopener noreferrer"
           className={`text-xs md:text-sm hover:underline transition-colors ${

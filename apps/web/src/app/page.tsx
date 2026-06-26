@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
-import InstallCard, { INSTALL_COMMANDS } from "../components/InstallCard";
-import VideoCard from "../components/VideoCard";
+import InstallCard, { INSTALL_COMMANDS } from "../components/landing/InstallCard";
+import VideoCard from "../components/landing/VideoCard";
+import CommandBuilder from "../components/landing/CommandBuilder";
+import ComparisonTable from "../components/landing/ComparisonTable";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -42,7 +45,7 @@ export default function Home() {
       </div>
 
       {/* Main Content Wrapper */}
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-8 md:gap-18 px-4 pb-6 md:px-8 md:pb-12 mt-8 md:mt-16">
+      <div className="w-full max-w-5xl mx-auto flex flex-col gap-12 md:gap-20 px-4 pb-12 md:px-8 md:pb-24 mt-8 md:mt-16">
         {/* Content Section: Split Columns, aligned at start top level */}
         <main className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
           {/* Left Column: Heading and Install Snippet */}
@@ -78,6 +81,21 @@ export default function Home() {
             <VideoCard isDarkMode={isDarkMode} />
           </div>
         </main>
+
+        {/* Divider */}
+        <div className={`h-px w-full transition-colors ${isDarkMode ? "bg-zinc-800" : "bg-zinc-400"}`} />
+
+        {/* Interactive Command Builder Section */}
+        <CommandBuilder isDarkMode={isDarkMode} />
+
+        {/* Divider */}
+        <div className={`h-px w-full transition-colors ${isDarkMode ? "bg-zinc-800" : "bg-zinc-400"}`} />
+
+        {/* Comparison Section */}
+        <ComparisonTable isDarkMode={isDarkMode} />
+
+        {/* Footer Wrapper: matches header alignment and width */}
+        <Footer isDarkMode={isDarkMode} />
       </div>
     </div>
   );
