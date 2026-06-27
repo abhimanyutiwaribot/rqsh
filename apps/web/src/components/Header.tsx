@@ -1,18 +1,26 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
-interface HeaderProps {
-  isDarkMode: boolean;
-  onToggleTheme: () => void;
-}
+export default function Header() {
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-export default function Header({ isDarkMode, onToggleTheme }: HeaderProps) {
+  // Prevent hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  };
+
+  const isDark = resolvedTheme === "dark";
+
   return (
-    <header
-      className={`flex items-center justify-between px-6 py-4 md:px-8 rounded-full border transition-all ${
-        isDarkMode ? "border-zinc-800 bg-black" : "border-zinc-500 bg-[#bebebe]"
-      }`}
-    >
+    <header className="flex items-center justify-between px-6 py-4 md:px-8 rounded-full border transition-all border-zinc-500 bg-[#bebebe] dark:border-zinc-800 dark:bg-black">
       <div className="flex items-center gap-2">
         <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
           <span className="font-bold text-base md:text-lg">
@@ -23,9 +31,7 @@ export default function Header({ isDarkMode, onToggleTheme }: HeaderProps) {
       <div className="flex items-center gap-4 md:gap-8">
         <Link
           href="/docs"
-          className={`text-xs md:text-sm hover:underline transition-colors ${
-            isDarkMode ? "text-zinc-300 hover:text-white" : "text-zinc-700 hover:text-black"
-          }`}
+          className="text-xs md:text-sm hover:underline transition-colors text-zinc-700 hover:text-black dark:text-zinc-300 dark:hover:text-white"
         >
           Docs
         </Link>
@@ -33,22 +39,18 @@ export default function Header({ isDarkMode, onToggleTheme }: HeaderProps) {
           href="https://github.com/abhimanyutiwaribot/postcli"
           target="_blank"
           rel="noopener noreferrer"
-          className={`text-xs md:text-sm hover:underline transition-colors ${
-            isDarkMode ? "text-zinc-300 hover:text-white" : "text-zinc-700 hover:text-black"
-          }`}
+          className="text-xs md:text-sm hover:underline transition-colors text-zinc-700 hover:text-black dark:text-zinc-300 dark:hover:text-white"
         >
           Github
         </a>
 
         {/* Dark Mode Toggle Button */}
         <button
-          onClick={onToggleTheme}
+          onClick={toggleTheme}
           aria-label="Toggle Theme"
-          className={`p-1.5 rounded-lg transition-all ${
-            isDarkMode ? "hover:bg-zinc-900 text-white" : "hover:bg-zinc-300 text-black"
-          }`}
+          className="p-1.5 rounded-lg transition-all hover:bg-zinc-300 text-black dark:hover:bg-zinc-900 dark:text-white"
         >
-          {isDarkMode ? (
+          {mounted && isDark ? (
             // Sun Icon for Light Mode Toggle
             <svg
               xmlns="http://www.w3.org/2000/svg"
