@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 export default function CommandBuilder() {
@@ -289,10 +290,8 @@ export default function CommandBuilder() {
 
         {/* Spacious documentation link as an organic blob button */}
         <div className="w-full flex justify-center md:justify-start mt-4">
-          <a
-            href="https://github.com/abhimanyutiwaribot/postcli"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/docs/getting-started"
             className="inline-flex items-center justify-center gap-2.5 bg-magenta text-black font-bold px-8 py-4 rounded-[12px_36px_15px_30px_/_24px_12px_30px_16px] hover:-rotate-[1deg] hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 select-none cursor-pointer text-sm shadow-sm"
           >
             <span>Visit docs for more</span>
@@ -311,7 +310,7 @@ export default function CommandBuilder() {
               <path d="M7 7h10v10" />
               <path d="M7 17 17 7" />
             </svg>
-          </a>
+          </Link>
         </div>
 
       </div>

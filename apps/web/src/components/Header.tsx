@@ -30,7 +30,7 @@ export default function Header() {
       </div>
       <div className="flex items-center gap-4 md:gap-8">
         <Link
-          href="/docs"
+          href="/docs/getting-started"
           className="text-xs md:text-sm hover:underline transition-colors text-zinc-700 hover:text-black dark:text-zinc-300 dark:hover:text-white"
         >
           Docs

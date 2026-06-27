@@ -19,10 +19,10 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
   }, [pathname]);
 
   const navLinks = [
-    { href: "/docs/getting-started", title: "Getting Started" },
-    { href: "/docs/repl-modes", title: "REPL Modes" },
-    { href: "/docs/syntax-guide", title: "Syntax Guide" },
-    { href: "/docs/system-commands", title: "System Commands" },
+    { href: "/docs/getting-started", title: "getting started" },
+    { href: "/docs/repl-modes", title: "repl modes" },
+    { href: "/docs/syntax-guide", title: "syntax guide" },
+    { href: "/docs/system-commands", title: "system commands" },
   ];
 
   return (
@@ -62,14 +62,23 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
           <div className="md:hidden flex flex-col w-full relative">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider select-none py-1.5 px-1 focus:outline-none w-fit cursor-pointer text-black dark:text-white"
+              className="flex items-center gap-2 text-lg font-bold tracking-wider select-none py-1.5 px-1 focus:outline-none w-fit cursor-pointer text-black dark:text-white"
             >
-              <span className="text-magenta font-black">{isMenuOpen ? "˅" : ">"}</span> Menu
+              {isMenuOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-magenta">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-magenta">
+                  <path d="m9 18 6-6-6-6" />
+                </svg>
+              )}
+              menu
             </button>
             
             {isMenuOpen && (
               <div
-                className="flex flex-col gap-3.5 p-4 border mt-2 rounded-xl transition-all z-20 shadow-md border-zinc-500 bg-white text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
+                className="flex flex-col gap-3.5 p-4 border mt-2 rounded-xl transition-all z-20 shadow-md border-zinc-500  text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
               >
                 {navLinks.map((link) => {
                   const isActive = pathname === link.href;

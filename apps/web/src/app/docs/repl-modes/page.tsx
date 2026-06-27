@@ -38,7 +38,7 @@ export default function ReplModes() {
           key bindings
         </span>
         <div
-          className="border overflow-hidden rounded-xl border-zinc-500 bg-white text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
+          className="border overflow-hidden rounded-xl border-zinc-500 text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
         >
           <table className="w-full text-left border-collapse text-xs md:text-sm">
             <thead>

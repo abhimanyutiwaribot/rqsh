@@ -16,7 +16,7 @@ export default function SyntaxGuide() {
           <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-400">
             start with the method (GET, POST, etc). if skipped, we default to GET. relative paths resolve against the base url.
           </p>
-          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500 bg-white text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
+          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500  text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
             GET /posts <br />
             /posts/1
           </div>
@@ -27,7 +27,7 @@ export default function SyntaxGuide() {
           <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-400">
             use double equals (==) to add query parameters to your path.
           </p>
-          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500 bg-white text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
+          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500  text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
             GET /posts limit==10 page==2
           </div>
         </div>
@@ -37,7 +37,7 @@ export default function SyntaxGuide() {
           <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-400">
             use a colon (:) to pass request headers. wrap values in quotes if they contain spaces.
           </p>
-          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500 bg-white text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
+          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500  text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
             GET /users Authorization:"Bearer token123" Content-Type:application/json
           </div>
         </div>
@@ -47,7 +47,7 @@ export default function SyntaxGuide() {
           <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-400">
             use a single equals (=) to send standard text string fields inside the request JSON body.
           </p>
-          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500 bg-white text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
+          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500  text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
             POST /posts title="New post" category=tech
           </div>
         </div>
@@ -57,7 +57,7 @@ export default function SyntaxGuide() {
           <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-400">
             use colon-equals (:=) to send typed data like numbers, booleans, arrays, or raw json objects.
           </p>
-          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500 bg-white text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
+          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500  text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
             POST /posts published:=true views:=150 tags:='["news", "web"]'
           </div>
         </div>
@@ -67,7 +67,7 @@ export default function SyntaxGuide() {
           <p className="text-sm md:text-base text-zinc-700 dark:text-zinc-400">
             build nested JSON layouts using bracket paths.
           </p>
-          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500 bg-white text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
+          <div className="p-4 rounded-lg border font-mono text-sm overflow-x-auto select-all border-zinc-500  text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white">
             POST /users user[name]="John" user[address][city]="Seattle"
           </div>
         </div>

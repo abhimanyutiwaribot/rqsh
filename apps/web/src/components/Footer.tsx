@@ -62,7 +62,7 @@ export default function Footer() {
             Github
           </a>
           <Link
-            href="/docs"
+            href="/docs/getting-started"
             className="hover:underline transition-all text-zinc-650 dark:text-zinc-500 hover:text-black dark:hover:text-white"
           >
             Docs

@@ -15,7 +15,7 @@ export default function GettingStarted() {
           installation
         </span>
         <div
-          className="p-5 rounded-xl border relative font-mono text-sm overflow-x-auto select-all border-zinc-500 bg-white text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
+          className="p-5 rounded-xl border relative font-mono text-sm overflow-x-auto  border-zinc-500 text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
         >
           <div className="flex flex-col gap-4">
             <div><span className="text-zinc-500"># npm</span> <br />npm install -g postcli</div>
@@ -34,7 +34,7 @@ export default function GettingStarted() {
           once installed, run this command to boot into the prompt:
         </p>
         <div
-          className="p-5 rounded-xl border font-mono text-sm overflow-x-auto select-all border-zinc-500 bg-white text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
+          className="p-5 rounded-xl border font-mono text-sm overflow-x-auto select-all border-zinc-500 text-black dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
         >
           postcli
         </div>
