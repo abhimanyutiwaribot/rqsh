@@ -89,8 +89,8 @@ export function useKeyboardNavigation({ state: propState }: KeyboardNavigationPr
       }
     }
 
-    // Toggle Response Inspector (v / V)
-    if (input === "v" || input === "V") {
+    // Toggle Response Inspector (v / V) - only in log mode!
+    if (panel === "log" && (input === "v" || input === "V")) {
       if (lastResponseBody) {
         state.setViewingResponse(true);
         state.setInspectorTab("body");
