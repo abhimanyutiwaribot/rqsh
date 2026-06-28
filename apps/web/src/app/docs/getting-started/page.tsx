@@ -1,4 +1,9 @@
-import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Getting Started - PostCLI Docs",
+  description: "Learn how to install PostCLI via npm, bun, yarn, or pnpm, and boot the interactive HTTP terminal REPL prompt.",
+};
 
 export default function GettingStarted() {
   return (
@@ -9,7 +14,7 @@ export default function GettingStarted() {
       <p className="text-base md:text-lg text-zinc-850 dark:text-zinc-300">
         install postcli globally to start using the interactive REPL in your terminal.
       </p>
-      
+
       <div className="flex flex-col gap-2 mt-4">
         <span className="text-xs md:text-sm font-bold uppercase tracking-wider text-zinc-500">
           installation

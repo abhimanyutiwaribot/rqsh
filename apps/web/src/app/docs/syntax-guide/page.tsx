@@ -1,4 +1,9 @@
-import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Request Syntax Guide — PostCLI Docs",
+  description: "Syntax rules for HTTP methods, query parameter mappings (==), custom headers (:), body string properties (=), raw typed JSON (:=), and nested paths.",
+};
 
 export default function SyntaxGuide() {
   return (

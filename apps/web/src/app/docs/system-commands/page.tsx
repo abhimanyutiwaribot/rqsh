@@ -1,4 +1,9 @@
-import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "System Slash Commands — PostCLI Docs",
+  description: "Complete list of console commands to configure base API URLs (/set base), clear output logs (/clear), print help cheat sheets (/help), or exit the prompt.",
+};
 
 export default function SystemCommands() {
   return (

@@ -1,4 +1,9 @@
-import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "REPL Modes & Key Bindings — PostCLI Docs",
+  description: "Guide to PostCLI input and scroll modes, vim key navigation, response details inspector, and clipboard copy shortcuts.",
+};
 
 export default function ReplModes() {
   return (
