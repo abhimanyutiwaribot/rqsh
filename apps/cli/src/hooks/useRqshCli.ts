@@ -248,7 +248,7 @@ export function useRqsh() {
         copy.splice(logIndex, 1);
         return [
           ...copy,
-          `✔  ${result.status} ${result.status < 400 ? "OK" : "Error"}  •  ${result.time}ms  •  ${sizeStr}  (Press v to view details)`,
+          `✔  ${result.status} ${result.status < 400 ? "OK" : "Error"}  •  ${result.time}ms  •  ${sizeStr}  (Press Esc + v to view details)`,
           ""
         ];
       });

@@ -30,7 +30,7 @@ export default function ReplConsole({ state }: ReplConsoleProps) {
         </Text>
         {state.lastResponseBody && (
           <Text color="gray">
-            Last Response: <Text color="magenta">available</Text> <Text dimColor>(Press v to view details)</Text>
+            Last Response: <Text color="magenta">available</Text> <Text dimColor>(Press Esc + v to view details)</Text>
           </Text>
         )}
       </Box>
@@ -120,7 +120,7 @@ export default function ReplConsole({ state }: ReplConsoleProps) {
       {state.panel === "input" && (
         <Box paddingX={2} marginTop={0}>
           <Text dimColor>
-            Press <Text color="magenta">Esc</Text> scroll mode  •  Type <Text color="magenta">/help</Text> commands  •  Press <Text color="magenta">v</Text> inspector
+            Press <Text color="magenta">Esc</Text> scroll mode  •  Type <Text color="magenta">/help</Text> commands  •  Press <Text color="magenta">Esc + v</Text> inspector
           </Text>
         </Box>
       )}
