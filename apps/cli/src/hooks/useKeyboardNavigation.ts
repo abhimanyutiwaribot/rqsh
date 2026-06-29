@@ -1,10 +1,10 @@
 import { useInput } from "ink";
 import { useRef } from "react";
 import { makeField, tfDelete, tfInsert, tfLeft, tfRight } from "../utils/textField.js";
-import type { useRqs } from "./useRqsCli.js";
+import type { useRqsh } from "./useRqshCli.js";
 
 interface KeyboardNavigationProps {
-  state: ReturnType<typeof useRqs>;
+  state: ReturnType<typeof useRqsh>;
 }
 
 export function useKeyboardNavigation({ state: propState }: KeyboardNavigationProps) {

@@ -1,11 +1,11 @@
 import React from "react";
-import { useRqs } from "./hooks/useRqsCli.js";
+import { useRqsh } from "./hooks/useRqshCli.js";
 import { useKeyboardNavigation } from "./hooks/useKeyboardNavigation.js";
 import ResponseInspector from "./components/ResponseInspector.js";
 import ReplConsole from "./components/ReplConsole.js";
 
 export default function App() {
-  const state = useRqs();
+  const state = useRqsh();
 
   // Wire up REPL keyboard event loop
   useKeyboardNavigation({ state });

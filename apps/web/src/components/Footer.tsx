@@ -38,11 +38,11 @@ export default function Footer() {
         title="Scroll to top"
       >
         <span className="text-[12vw] sm:text-8xl md:text-9xl font-black tracking-tighter text-magenta blur-[8px] opacity-75 select-none font-mono whitespace-nowrap">
-          rqs ❯
+          rqsh ❯
         </span>
         {/* Crisp foreground layer */}
         <span className="absolute text-[12vw] sm:text-8xl md:text-9xl font-black tracking-tighter text-magenta/90 select-none font-mono whitespace-nowrap">
-          rqs ❯
+          rqsh ❯
         </span>
       </div>
 
@@ -53,7 +53,7 @@ export default function Footer() {
         </div>
         <div className="flex gap-6">
           <a
-            href="https://github.com/abhimanyutiwaribot/rqs"
+            href="https://github.com/abhimanyutiwaribot/rqsh"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:underline transition-all text-zinc-650 dark:text-zinc-500 hover:text-black dark:hover:text-white"

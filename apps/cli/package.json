@@ -1,5 +1,5 @@
 {
-  "name": "rqs",
+  "name": "rqsh",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -17,7 +17,7 @@
   "license": "ISC",
   "type": "module",
   "bin": {
-    "rqs": "./dist/index.js"
+    "rqsh": "./dist/index.js"
   },
   "dependencies": {
     "clipboardy": "^5.3.1"

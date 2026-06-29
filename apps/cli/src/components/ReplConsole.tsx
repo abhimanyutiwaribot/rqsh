@@ -2,10 +2,10 @@ import React from "react";
 import { Box, Text } from "ink";
 import { highlightJsonLine } from "../utils/response.js";
 import { SPINNER_FRAMES } from "../utils/animations.js";
-import type { RqsState } from "../hooks/useRqsCli.js";
+import type { RqshState } from "../hooks/useRqshCli.js";
 
 interface ReplConsoleProps {
-  state: RqsState;
+  state: RqshState;
 }
 
 export default function ReplConsole({ state }: ReplConsoleProps) {
@@ -18,7 +18,7 @@ export default function ReplConsole({ state }: ReplConsoleProps) {
     <Box flexDirection="column" padding={1}>
       {/* Header */}
       <Box paddingX={1} gap={1} marginBottom={0}>
-        <Text bold color="magenta">❯ RQS REPL</Text>
+        <Text bold color="magenta">❯ RQSH REPL</Text>
         <Text dimColor>—</Text>
         <Text color="gray">interactive HTTP shell console</Text>
       </Box>
@@ -54,7 +54,7 @@ export default function ReplConsole({ state }: ReplConsoleProps) {
               <Text
                 color={
                   line.startsWith("  █") || line.startsWith("  ╚") ? "magenta" :
-                    line.startsWith("rqs ❯") ? "magenta" :
+                    line.startsWith("rqsh ❯") ? "magenta" :
                       line.startsWith("❯") ? "yellow" :
                         "white"
                 }
@@ -84,7 +84,7 @@ export default function ReplConsole({ state }: ReplConsoleProps) {
       >
         {state.panel === "input" ? (
           <Box>
-            <Text color="magenta" bold>rqs ❯ </Text>
+            <Text color="magenta" bold>rqsh ❯ </Text>
             {(() => {
               const { value, cursor } = state.inputValue;
               const before = value.slice(0, cursor);

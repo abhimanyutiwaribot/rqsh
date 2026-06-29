@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 
 const INSTALL_COMMANDS = {
-  npm: "npm install -g rqs",
-  bun: "bun add -g rqs",
-  yarn: "yarn global add rqs",
-  pnpm: "pnpm add -g rqs",
+  npm: "npm install -g rqsh",
+  bun: "bun add -g rqsh",
+  yarn: "yarn global add rqsh",
+  pnpm: "pnpm add -g rqsh",
 };
 
 export default function InstallCard() {
@@ -82,11 +82,10 @@ export default function InstallCard() {
             <button
               key={pkg}
               onClick={() => setActivePkg(pkg)}
-              className={`text-xs md:text-sm transition-all hover:underline ${
-                activePkg === pkg
+              className={`text-xs md:text-sm transition-all hover:underline ${activePkg === pkg
                   ? "font-bold text-magenta underline underline-offset-4"
                   : "text-zinc-650 hover:text-black dark:text-zinc-400 dark:hover:text-white"
-              }`}
+                }`}
             >
               {pkg}
             </button>

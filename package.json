@@ -1,5 +1,5 @@
 {
-  "name": "rqs-monorepo",
+  "name": "rqsh-monorepo",
   "private": true,
   "type": "module",
   "workspaces": [

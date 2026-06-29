@@ -2,10 +2,10 @@ import React from "react";
 import { Box, Text } from "ink";
 import { highlightJsonLine } from "../utils/response.js";
 import { VICTORY_FRAMES, FAILURE_FRAMES } from "../utils/animations.js";
-import type { RqsState } from "../hooks/useRqsCli.js";
+import type { RqshState } from "../hooks/useRqshCli.js";
 
 interface ResponseInspectorProps {
-  state: RqsState;
+  state: RqshState;
 }
 
 export default function ResponseInspector({ state }: ResponseInspectorProps) {

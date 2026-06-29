@@ -16,20 +16,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rqscli.vercel.app"),
-  title: "RQS — Interactive Developer HTTP Client",
+  metadataBase: new URL("https://rqsh.vercel.app"),
+  title: "RQSH — Interactive Developer HTTP Client",
   description: "An interactive, terminal-based HTTP client built for developers, featuring automated parameter tokenization and responsive ASCII mascot companions.",
   openGraph: {
-    title: "RQS — Interactive Developer HTTP Client",
+    title: "RQSH — Interactive Developer HTTP Client",
     description: "An interactive, terminal-based HTTP client built for developers, featuring automated parameter tokenization and responsive ASCII mascot companions.",
-    url: "https://rqscli.vercel.app",
-    siteName: "RQS",
+    url: "https://rqsh.vercel.app",
+    siteName: "RQSH",
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "RQS — Interactive Developer HTTP Client",
+        alt: "RQSH — Interactive Developer HTTP Client",
       },
     ],
     locale: "en_US",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "RQS — Interactive Developer HTTP Client",
+    title: "RQSH — Interactive Developer HTTP Client",
     description: "An interactive, terminal-based HTTP client built for developers, featuring automated parameter tokenization and responsive ASCII mascot companions.",
     images: ["/opengraph-image.png"],
     creator: "@abhimanyutwts",
