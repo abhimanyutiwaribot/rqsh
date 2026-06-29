@@ -1,6 +1,6 @@
 {
-  "name": "rqsh",
-  "version": "1.0.0",
+  "name": "request-shell",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "files": [
@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "dev": "tsx src/index.tsx",
-    "build": "esbuild src/index.tsx --bundle --minify --platform=node --format=esm --outfile=dist/index.js --external:clipboardy --alias:react-devtools-core=./src/utils/mockDevtools.ts --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\"",
+    "build": "node build.js",
     "prepack": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
