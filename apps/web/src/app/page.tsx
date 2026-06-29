@@ -13,23 +13,35 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <div className="w-full max-w-5xl mx-auto flex flex-col gap-12 md:gap-20 px-4 pb-12 md:px-8 md:pb-24 mt-8 md:mt-16 flex-grow">
-      <main className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
-        <div className="md:col-span-5 flex flex-col items-center md:items-start gap-6 md:gap-8 w-full">
-          <h1 className="block md:hidden text-xl font-semibold leading-relaxed tracking-wide text-center w-full whitespace-pre-line">
-            {"An interactive,\nTerminal-based HTTP-Client\n"}
-            <span className="inline-block bg-magenta text-black font-bold px-3 py-0.5 mt-2 rounded-[8px_24px_12px_32px_/_16px_8px_24px_12px] rotate-[-1.5deg] shadow-sm select-none">
-              built for you!!
-            </span>
-          </h1>
-          <h1 className="hidden md:block text-2xl font-semibold leading-relaxed tracking-wide text-left w-full">
-            An interactive, terminal-based <br /> http-client
-            <span className="inline-block bg-magenta text-black font-bold px-4 py-1 mt-0 -ml-4 rounded-[10px_35px_15px_30px_/_20px_10px_30px_15px] rotate-[-2deg] shadow-sm select-none">
-              built for you!!
-            </span>
-          </h1>
-          <InstallCard />
+      
+      {/* Hero Header Section */}
+      <main className="flex flex-col gap-12 items-center w-full">
+        {/* Titles & Install Card Wrapper */}
+        <div className="flex flex-col gap-8 items-center w-full max-w-2xl">
+          {/* Brand Titles */}
+          <div className="flex flex-col items-center gap-4 w-full">
+            <h1 className="block md:hidden text-xl font-semibold leading-relaxed tracking-wide text-center w-full whitespace-pre-line">
+              {"An interactive,\nTerminal-based HTTP-Client\n"}
+              <span className="inline-block bg-magenta text-black font-bold px-3 py-0.5 mt-2 rounded-[8px_24px_12px_32px_/_16px_8px_24px_12px] rotate-[-1.5deg] shadow-sm select-none">
+                built for you!!
+              </span>
+            </h1>
+            <h1 className="hidden md:block text-2xl md:text-3xl font-semibold leading-relaxed tracking-wide text-center w-full">
+              An interactive, terminal-based <br /> HTTP-Client <br />
+              <span className="inline-block bg-magenta text-black font-bold px-4 py-1 mt-3 rounded-[10px_35px_15px_30px_/_20px_10px_30px_15px] rotate-[-2deg] shadow-sm select-none">
+                built for you!!
+              </span>
+            </h1>
+          </div>
+          
+          {/* Global Install Command Selector */}
+          <div className="w-full max-w-md">
+            <InstallCard />
+          </div>
         </div>
-        <div className="md:col-span-7 w-full flex items-center justify-center">
+
+        {/* Massive Full-Width Terminal Demo Video */}
+        <div className="w-full flex items-center justify-center mt-2">
           <VideoCard />
         </div>
       </main>

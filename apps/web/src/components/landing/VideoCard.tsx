@@ -1,13 +1,16 @@
-"use client"
+"use client";
+
+import React from "react";
+
 export default function VideoCard() {
   return (
     <div
-      className="w-full h-[250px] sm:h-[350px] md:h-[400px] rounded-3xl border overflow-hidden relative flex items-center justify-center transition-all border-zinc-500 bg-zinc-200/30 dark:border-zinc-800 dark:bg-black"
+      className="w-full aspect-video rounded-3xl border overflow-hidden relative flex items-center justify-center transition-all border-zinc-500 bg-zinc-200/30 dark:border-zinc-800 dark:bg-black/40 shadow-sm"
     >
       {/* Branded Fallback Placeholder label */}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 select-none z-0">
         <span className="text-xs md:text-sm font-semibold tracking-wide font-mono text-magenta/80 dark:text-magenta/50">
-          [ demo video ]
+          [ loading demo video... ]
         </span>
       </div>
       <video
@@ -16,7 +19,7 @@ export default function VideoCard() {
         loop
         muted
         playsInline
-        className="w-full h-full object-cover relative z-10"
+        className="w-full h-full object-contain relative z-10"
         onError={(e) => {
           // Hide missing video outline
           (e.target as HTMLVideoElement).style.opacity = "0";
